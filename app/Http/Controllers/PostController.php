@@ -58,4 +58,59 @@ class PostController extends BaseController
         $post->resrore();
         dd('deleted');
     }
+
+    //firstOrCreate
+    //updateOrCreate
+
+    public function firstOrCreate() {
+        $anotherPost = [
+            'title' => 'some post',
+            'content' => 'content text another',
+            'is_published' => 0,
+            'image' => 'image text another',
+            'likes' => 15
+        ];
+
+        $post = Post::firstOrCreate(
+        [
+            'title' => 'title text 2',
+        ],
+        [
+            'title' => 'some post',
+            'content' => 'content text another',
+            'is_published' => 0,
+            'image' => 'image text another',
+            'likes' => 15
+        ]);
+
+        dump($post);
+
+        dd('finished');
+    }
+
+    public function updateOrCreate() {
+        $anotherPost = [
+            'title' => 'some post updateOrCreate',
+            'content' => 'content text another updateOrCreate',
+            'is_published' => 0,
+            'image' => 'image text another updateOrCreate',
+            'likes' => 5
+        ];
+
+        $post = Post::updateOrCreate(
+        [
+            'title' => 'some post',
+        ],
+        [
+            'title' => 'some post updateOrCreate',
+            'content' => 'content text another updateOrCreate',
+            'is_published' => 0,
+            'image' => 'image text another updateOrCreate',
+            'likes' => 5
+        ]);
+
+        dump($post->content);
+
+        dd(777);
+    }
 }
