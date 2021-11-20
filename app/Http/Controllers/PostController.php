@@ -11,51 +11,54 @@ use Illuminate\Routing\Controller as BaseController;
 class PostController extends BaseController
 {
     public function index() {
-        $rew = 777;
         $posts = Post::all();
-        return view('posts', compact('posts'));
+        return view('post.index', compact('posts'));
     }
 
     public function create() {
-        $postsArr = [
-            [
-                'title' => 'title text',
-                'content' => 'content text',
-                'is_published' => 1,
-                'image' => 'image text',
-                'likes' => 50
-            ],
-            [
-                'title' => 'title text another',
-                'content' => 'content text another',
-                'is_published' => 0,
-                'image' => 'image text another',
-                'likes' => 15
-            ],
-        ];
-
-       foreach ($postsArr as $item) {
-           Post::create($item);
-       }
-
-        dd('created');
+        return view('post.create');
     }
 
-    public function update() {
-        $post = Post::find(6);
-
-        $post->update([
-            'title' => 'title text another update222',
-            'content' => 'content text another update777',
+    public function store() {
+        $data = request()->validate([
+            'title' => 'string',
+            'content' => 'string',
+            'image' => 'string',
         ]);
 
-        dd('updated');
+        Post::create($data);
+        return redirect()->route('post.index');
+    }
+
+    public function show(Post $post) {
+//        $post = Post::findOrFail($post);
+        return view('post.show', compact('post'));
+    }
+
+    public function edit(Post $post) {
+        return view('post.edit', compact('post'));
+    }
+
+    public function update(Post $post) {
+        $data = request()->validate([
+            'title' => 'string',
+            'content' => 'string',
+            'image' => 'string',
+        ]);
+
+        $post->update($data);
+        return redirect()->route('post.show', $post->id);
     }
 
     public function delete() {
         $post = Post::withoutTrashed()->find(2);
         $post->resrore();
         dd('deleted');
+
+    }
+    public function destroy(Post $post) {
+        $post->delete();
+        return redirect()->route('post.index');
     }
 
     //firstOrCreate
