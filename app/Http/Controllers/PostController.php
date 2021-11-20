@@ -11,10 +11,9 @@ use Illuminate\Routing\Controller as BaseController;
 class PostController extends BaseController
 {
     public function index() {
-        $posts = Post::where('is_published',1)->get();
-        foreach ($posts as $post) {
-            dump($post->title);
-        }
+        $rew = 777;
+        $posts = Post::all();
+        return view('posts', compact('posts'));
     }
 
     public function create() {
