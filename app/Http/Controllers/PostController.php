@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -10,16 +11,22 @@ use Illuminate\Routing\Controller as BaseController;
 
 class PostController extends BaseController
 {
-    public function index() {
-        $posts = Post::all();
-        return view('post.index', compact('posts'));
+    public function index()
+    {
+        $categories = Category::find(1);
+        $post = Post::find(1);
+//        return view('post.index', compact('posts'));
+
+        dd($post->category);
     }
 
-    public function create() {
+    public function create()
+    {
         return view('post.create');
     }
 
-    public function store() {
+    public function store()
+    {
         $data = request()->validate([
             'title' => 'string',
             'content' => 'string',
@@ -30,16 +37,19 @@ class PostController extends BaseController
         return redirect()->route('post.index');
     }
 
-    public function show(Post $post) {
+    public function show(Post $post)
+    {
 //        $post = Post::findOrFail($post);
         return view('post.show', compact('post'));
     }
 
-    public function edit(Post $post) {
+    public function edit(Post $post)
+    {
         return view('post.edit', compact('post'));
     }
 
-    public function update(Post $post) {
+    public function update(Post $post)
+    {
         $data = request()->validate([
             'title' => 'string',
             'content' => 'string',
@@ -50,13 +60,16 @@ class PostController extends BaseController
         return redirect()->route('post.show', $post->id);
     }
 
-    public function delete() {
+    public function delete()
+    {
         $post = Post::withoutTrashed()->find(2);
         $post->resrore();
         dd('deleted');
 
     }
-    public function destroy(Post $post) {
+
+    public function destroy(Post $post)
+    {
         $post->delete();
         return redirect()->route('post.index');
     }
@@ -64,7 +77,8 @@ class PostController extends BaseController
     //firstOrCreate
     //updateOrCreate
 
-    public function firstOrCreate() {
+    public function firstOrCreate()
+    {
         $anotherPost = [
             'title' => 'some post',
             'content' => 'content text another',
@@ -74,23 +88,24 @@ class PostController extends BaseController
         ];
 
         $post = Post::firstOrCreate(
-        [
-            'title' => 'title text 2',
-        ],
-        [
-            'title' => 'some post',
-            'content' => 'content text another',
-            'is_published' => 0,
-            'image' => 'image text another',
-            'likes' => 15
-        ]);
+            [
+                'title' => 'title text 2',
+            ],
+            [
+                'title' => 'some post',
+                'content' => 'content text another',
+                'is_published' => 0,
+                'image' => 'image text another',
+                'likes' => 15
+            ]);
 
         dump($post);
 
         dd('finished');
     }
 
-    public function updateOrCreate() {
+    public function updateOrCreate()
+    {
         $anotherPost = [
             'title' => 'some post updateOrCreate',
             'content' => 'content text another updateOrCreate',
@@ -100,16 +115,16 @@ class PostController extends BaseController
         ];
 
         $post = Post::updateOrCreate(
-        [
-            'title' => 'some post',
-        ],
-        [
-            'title' => 'some post updateOrCreate',
-            'content' => 'content text another updateOrCreate',
-            'is_published' => 0,
-            'image' => 'image text another updateOrCreate',
-            'likes' => 5
-        ]);
+            [
+                'title' => 'some post',
+            ],
+            [
+                'title' => 'some post updateOrCreate',
+                'content' => 'content text another updateOrCreate',
+                'is_published' => 0,
+                'image' => 'image text another updateOrCreate',
+                'likes' => 5
+            ]);
 
         dump($post->content);
 
